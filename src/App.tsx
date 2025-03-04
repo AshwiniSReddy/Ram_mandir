@@ -529,6 +529,7 @@ function App() {
         score={gameState.score}
         totalQuestions={questions.length}
         onRestart={handleRestart}
+        completedAll={gameState.currentLevel + 1 === questions.length}
       />
     );
   }

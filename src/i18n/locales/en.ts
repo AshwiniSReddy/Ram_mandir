@@ -13,6 +13,9 @@ export const en = {
     timeRemaining: 's'
   },
   completion: {
+    gameOver:"gameOver",
+    tryAgain:"Try again",
+    restart:"Restart",
     congratulations: 'Congratulations!',
     completed: 'You have completed the Ram Mandir Construction Quiz!',
     score: 'Score',
