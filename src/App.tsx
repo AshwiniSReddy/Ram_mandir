@@ -46,7 +46,7 @@ function App() {
     sendMessage({ action: 'gameOver', code: 0 });
   };
 
-  // Reset state 3 seconds after game over or completion
+  // Reset state 30 seconds after game over or completion
   useEffect(() => {
     if (gameState.isGameCompleted) {
       const timeout = setTimeout(() => {
@@ -86,8 +86,6 @@ function App() {
     }
 
     if (isCorrect) {
-      // If finalAnswer is not set, one could send the websocket message here.
-      // But in our flow the websocket message is already sent immediately in QuizScreen.
       const newUnlockedSections = [...gameState.unlockedSections];
       newUnlockedSections[gameState.currentLevel] = true;
 

@@ -125,8 +125,8 @@ export const QuizScreen: React.FC<QuizScreenProps> = ({
     onAnswer(false, timeRemaining, false);
   };
 
-  // Use the translation keys assuming currentLevel is 1-indexed.
-  const options = t(`questions.${currentLevel}.options`, { returnObjects: true }) as string[];
+  // Use the question prop's options (ensuring they match the correctAnswer index)
+  const options = question.options;
 
   return (
     <motion.div 
@@ -153,10 +153,9 @@ export const QuizScreen: React.FC<QuizScreenProps> = ({
           className="bg-gray-800 rounded-lg p-6 mb-8"
           initial={{ y: 20 }}
           animate={{ y: 0 }}
-          key={`${currentLevel}-${isRetry}`}
         >
           <h2 className="text-2xl font-bold mb-6">
-            {t(`questions.${currentLevel}.text`)}
+            {question.text}
           </h2>
           
           <div className="grid gap-4">
@@ -227,7 +226,7 @@ export const QuizScreen: React.FC<QuizScreenProps> = ({
                 animate={{ opacity: 1, y: 0 }}
                 className="mt-4 text-gray-400"
               >
-                {t(`questions.${currentLevel}.hint`)}
+                {question.hint}
               </motion.p>
             )}
           </div>

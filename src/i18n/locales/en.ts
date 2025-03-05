@@ -58,7 +58,7 @@ export const en = {
         "Ashok Singhal",
         "Kameshwar Choupal"
       ],
-      "correctAnswer": 0
+      "correctAnswer": 1
     },
     {
       "text": "Which leader’s Rath Yatra played a crucial role in mobilizing people for the first Karseva?",
