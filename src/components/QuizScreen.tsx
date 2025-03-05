@@ -26,7 +26,7 @@ export const QuizScreen: React.FC<QuizScreenProps> = ({
   onTimeOut,
   currentLevel,
   totalLevels,
-  isRetry
+  isRetry,
 }) => {
   const { t } = useTranslation();
   const { sendMessage } = useWebSocket();
@@ -69,12 +69,12 @@ export const QuizScreen: React.FC<QuizScreenProps> = ({
 
   const handleAnswer = async (index: number) => {
     if (isAnswerProcessing) return;
-    
+
     setSelectedAnswer(index);
     setIsAnswerProcessing(true);
-    
+
     const isCorrect = index === question.correctAnswer;
-    
+
     if (isCorrect) {
       playCorrect();
       if (incorrectTimeout.current) {
@@ -97,7 +97,7 @@ export const QuizScreen: React.FC<QuizScreenProps> = ({
         console.log('Sending incorrect message with code 0');
         sendMessage({
           action: 'incorrect',
-          code: 0
+          code: 0,
         });
         setShowRetryButton(true);
         incorrectTimeout.current = window.setTimeout(() => {
@@ -125,17 +125,17 @@ export const QuizScreen: React.FC<QuizScreenProps> = ({
     onAnswer(false, timeRemaining, false);
   };
 
-  // Use the question prop's options (ensuring they match the correctAnswer index)
+  // Use the question prop's options (they are localized via the translation file)
   const options = question.options;
 
   return (
-    <motion.div 
+    <motion.div
       initial={{ opacity: 0 }}
       animate={{ opacity: 1 }}
       className="min-h-screen bg-gray-900 text-white p-6 flex flex-col items-center justify-center"
     >
       <LanguageToggle />
-      
+
       <div className="w-full max-w-3xl">
         <div className="flex justify-between items-center mb-8">
           <div className="text-xl font-semibold">
@@ -144,20 +144,15 @@ export const QuizScreen: React.FC<QuizScreenProps> = ({
           <div className="flex items-center gap-2 text-xl">
             <Timer className="text-orange-500" />
             <span className={timeRemaining < 10 ? 'text-red-500' : 'text-white'}>
-              {timeRemaining}{t('quiz.timeRemaining')}
+              {timeRemaining}
+              {t('quiz.timeRemaining')}
             </span>
           </div>
         </div>
 
-        <motion.div 
-          className="bg-gray-800 rounded-lg p-6 mb-8"
-          initial={{ y: 20 }}
-          animate={{ y: 0 }}
-        >
-          <h2 className="text-2xl font-bold mb-6">
-            {question.text}
-          </h2>
-          
+        <motion.div className="bg-gray-800 rounded-lg p-6 mb-8" initial={{ y: 20 }} animate={{ y: 0 }}>
+          <h2 className="text-2xl font-bold mb-6">{question.text}</h2>
+
           <div className="grid gap-4">
             {options.map((option: string, index: number) => (
               <motion.button
@@ -221,11 +216,7 @@ export const QuizScreen: React.FC<QuizScreenProps> = ({
               {t(showHint ? 'quiz.hideHint' : 'quiz.showHint')}
             </motion.button>
             {showHint && (
-              <motion.p
-                initial={{ opacity: 0, y: 10 }}
-                animate={{ opacity: 1, y: 0 }}
-                className="mt-4 text-gray-400"
-              >
+              <motion.p initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} className="mt-4 text-gray-400">
                 {question.hint}
               </motion.p>
             )}

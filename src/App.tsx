@@ -2,21 +2,31 @@ import React, { useState, useEffect } from 'react';
 import { WelcomeScreen } from './components/WelcomeScreen';
 import { QuizScreen } from './components/QuizScreen';
 import { CompletionScreen } from './components/CompletionScreen';
-import { questions } from './data/questions';
-import { GameState } from './types';
 import { useWebSocket } from './services/websocket';
+import { useTranslation } from 'react-i18next';
+import { GameState } from './types';
 
 function App() {
+  const { t } = useTranslation();
+  // Get the questions array from i18n (for example, from hi or en based on the active language)
+  const questions = t('questions', { returnObjects: true }) as Array<{
+    text: string;
+    options: string[];
+    correctAnswer: number;
+    hint?: string;
+  }>;
+
   const { connect, disconnect, sendMessage } = useWebSocket();
+
   const [gameState, setGameState] = useState<GameState>({
     currentLevel: 1, // start at level 1
     score: 0,
     timeRemaining: 30,
     isGameStarted: false,
     isGameCompleted: false,
-    // We use an extra element so that index equals level number
+    // We use an extra element so that the index equals the level number
     unlockedSections: new Array(questions.length + 1).fill(false),
-    retryAttempt: false
+    retryAttempt: false,
   });
 
   useEffect(() => {
@@ -33,7 +43,7 @@ function App() {
 
   // Centralized reset function
   const resetGameState = () => {
-    console.log("Resetting game state to welcome screen");
+    console.log('Resetting game state to welcome screen');
     setGameState({
       currentLevel: 1,
       score: 0,
@@ -41,7 +51,7 @@ function App() {
       isGameStarted: false,
       isGameCompleted: false,
       unlockedSections: new Array(questions.length + 1).fill(false),
-      retryAttempt: false
+      retryAttempt: false,
     });
     sendMessage({ action: 'gameOver', code: 0 });
   };
@@ -60,12 +70,12 @@ function App() {
     // Send a gameOver message with the current level.
     sendMessage({
       action: 'gameOver',
-      level: gameState.currentLevel
+      level: gameState.currentLevel,
     });
     setGameState(prev => ({
       ...prev,
       isGameCompleted: true,
-      retryAttempt: false
+      retryAttempt: false,
     }));
   };
 
@@ -76,11 +86,11 @@ function App() {
     if (!isCorrect && !gameState.retryAttempt) {
       setGameState(prev => ({
         ...prev,
-        retryAttempt: true
+        retryAttempt: true,
       }));
       sendMessage({
         action: 'incorrect',
-        level: gameState.currentLevel
+        level: gameState.currentLevel,
       });
       return;
     }
@@ -95,7 +105,7 @@ function App() {
           score: prev.score + 1,
           unlockedSections: newUnlockedSections,
           retryAttempt: false,
-          isGameCompleted: true
+          isGameCompleted: true,
         }));
       } else {
         setGameState(prev => ({
@@ -103,7 +113,7 @@ function App() {
           score: prev.score + 1,
           currentLevel: prev.currentLevel + 1,
           unlockedSections: newUnlockedSections,
-          retryAttempt: false
+          retryAttempt: false,
         }));
       }
     } else {
